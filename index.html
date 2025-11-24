@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🌟 PiyoPiyo Network (超高性能版) 🌟</title>
+    <title>🌟 PiyoPiyo Network (Firebase連携版) 🌟</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -15,12 +15,13 @@
         <header class="header">
             <button class="back-button" id="back-button" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
             <div class="header-title" id="main-header-title">🐣PiyoPiyo｜Network🐣</div>
+            <button class="search-button" id="search-button" onclick="openSearchOverlay()"><i class="fas fa-search"></i></button>
         </header>
 
         <div class="content-section active" id="welcome-section">
             <div class="form-card">
                 <h2>PiyoPiyoへようこそ！</h2>
-                <p>ブラウザにデータを永続化します。アカウント作成でデモを体験しましょう。</p>
+                <p>このバージョンは**Firebaseでデータ共有可能**です。アカウント作成でデモを体験しましょう。</p>
 
                 <button class="piyo-button" onclick="showSection('signup-form-section')">
                     <i class="fas fa-user-plus"></i> 新規登録
@@ -187,6 +188,23 @@
             </div>
         </div>
     </div>
+    
+    <div id="search-overlay">
+        <div class="search-panel">
+            <div class="search-header">
+                ユーザーID検索
+                <span class="close-search" onclick="closeSearchOverlay()"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="search-input-area">
+                <input type="text" id="user-id-input" placeholder="検索したいユーザーIDを入力...">
+                <button class="piyo-button" style="width: 100%; margin-top: 15px;" onclick="searchUserById()"><i class="fas fa-search"></i> 検索</button>
+                <div id="search-result-message" class="error-message" style="display: none; margin-top: 15px; background-color: #f0f0f0; color: #333;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     
     <script src="script.js"></script>
 </body>
