@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🌟 PiyoPiyo Network (超高性能版) 🌟</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="background-pattern"></div>
+
+        <header class="header">
+            <button class="back-button" id="back-button" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+            <div class="header-title" id="main-header-title">🐣PiyoPiyo｜Network🐣</div>
+        </header>
+
+        <div class="content-section active" id="welcome-section">
+            <div class="form-card">
+                <h2>PiyoPiyoへようこそ！</h2>
+                <p>ブラウザにデータを永続化します。アカウント作成でデモを体験しましょう。</p>
+
+                <button class="piyo-button" onclick="showSection('signup-form-section')">
+                    <i class="fas fa-user-plus"></i> 新規登録
+                </button>
+
+                <button class="piyo-button" id="login-entry-button" style="background-color: var(--piyo-yellow); margin-top: 20px;" onclick="showSection('login-form-section')">
+                    <i class="fas fa-sign-in-alt"></i> ログイン
+                </button>
+                
+                <button class="piyo-button logout-button" onclick="handleLogout()">
+                    <i class="fas fa-trash-alt"></i> 全データ削除 ＆ ログアウト
+                </button>
+            </div>
+        </div>
+
+        <div class="content-section" id="signup-form-section">
+            <div class="form-card">
+                <h2>🐣 新規アカウント作成 (1/2)</h2>
+                <div class="input-group"><label for="signup-id">ユーザーID</label><input type="text" id="signup-id" class="piyo-input" placeholder="半角英数字で入力"></div>
+                <div class="input-group"><label for="signup-name">表示名</label><input type="text" id="signup-name" class="piyo-input" placeholder="みんなに見える名前"></div>
+                <div class="input-group"><label for="signup-pass">パスワード</label><input type="password" id="signup-pass" class="piyo-input" placeholder="8文字以上"></div>
+                <div class="input-group"><label for="signup-pass-conf">パスワード再確認</label><input type="password" id="signup-pass-conf" class="piyo-input" placeholder="もう一度入力"></div>
+                <button class="piyo-button" onclick="validateSignupStep1()">次へ <i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="switch-link-area"><p>もうアカウントは作成済み？</p><span class="switch-link" onclick="showSection('login-form-section')">ログインしてみよう！</span></div>
+        </div>
+
+        <div class="content-section" id="signup-icon-section">
+            <div class="form-card">
+                <h2>✨ アイコンを設定 (2/2)</h2>
+                <p>アイコンを設定し、個性的なプロフィールを作りましょう。</p>
+                <img src="https://via.placeholder.com/150/FFC0CB/FFFFFF?text=Piyo" id="icon-preview" class="icon-preview" alt="アイコンプレビュー">
+                <label for="icon-upload" class="icon-upload-label"><i class="fas fa-image"></i> 画像を選択</label>
+                <input type="file" id="icon-upload" accept="image/*" onchange="previewIcon(event)">
+                <button class="piyo-button" onclick="completeSignup()">新規登録を完了 <i class="fas fa-check"></i></button>
+            </div>
+             <div class="switch-link-area"><p>アカウントがありませんか？</p><span class="switch-link" onclick="showSection('login-form-section')">ログイン画面へ</span></div>
+        </div>
+
+        <div class="content-section" id="login-form-section">
+            <div class="form-card">
+                <h2><i class="fas fa-lock"></i> ログイン</h2>
+                <p>IDとパスワードでログインしてください。</p>
+                <div class="input-group"><label for="login-id">ユーザーID</label><input type="text" id="login-id" class="piyo-input" placeholder="ユーザーID"></div>
+                <div class="input-group"><label for="login-pass">パスワード</label><input type="password" id="login-pass" class="piyo-input" placeholder="パスワード"></div>
+                <div id="login-error-message" class="error-message"></div>
+                <button class="piyo-button" onclick="handleLogin()">ログイン <i class="fas fa-sign-in-alt"></i></button>
+            </div>
+            <div class="switch-link-area"><p>アカウントがありませんか？</p><span class="switch-link" onclick="showSection('signup-form-section')">新規登録しましょう！</span></div>
+        </div>
+
+        <div class="content-section" id="main-section">
+            <div id="post-feed" class="scrollable-content">
+                <h3 style="padding: 15px; text-align: center; color: #666;"><i class="fas fa-sync-alt fa-spin"></i> フィードを読み込み中...</h3>
+            </div>
+        </div>
+        
+        <div class="content-section" id="post-creation-section">
+            <div class="form-card">
+                <h2><i class="fas fa-camera"></i> 新しい投稿を作成</h2>
+                <div class="input-group">
+                    <label for="post-title">タイトル（必須）</label>
+                    <input type="text" id="post-title" class="piyo-input" placeholder="投稿のタイトル">
+                </div>
+                <div class="input-group">
+                    <label for="post-image-upload">画像を選択</label>
+                    <input type="file" id="post-image-upload" accept="image/*" onchange="previewPostImage(event)">
+                    <img id="post-image-preview" src="" alt="プレビュー">
+                </div>
+                <div class="input-group">
+                    <label for="post-content">内容（必須）</label>
+                    <textarea id="post-content" class="piyo-input" placeholder="投稿の詳細"></textarea>
+                </div>
+                <div class="select-group">
+                    <label for="post-privacy"><i class="fas fa-globe"></i> 公開設定</label>
+                    <select id="post-privacy">
+                        <option value="public">完全公開</option>
+                        <option value="followers">フォロワーのみ</option>
+                        <option value="friends">友達のみ (相互フォロー)</option>
+                        <option value="private">自分のみ</option>
+                    </select>
+                </div>
+                
+                <button class="piyo-button" style="background-color: var(--piyo-yellow); color: var(--main-text-color);" onclick="submitNewPost()"><i class="fas fa-paper-plane"></i> 投稿</button>
+            </div>
+        </div>
+
+        <div class="content-section" id="profile-section">
+            <div id="profile-header-content">
+                 </div>
+            
+            <div class="profile-actions">
+                <button id="profile-follow-button" class="piyo-button" onclick="toggleFollowProfile()"></button>
+                <button id="profile-dm-button" class="piyo-button" style="background-color: #e0e0e0; color: #333;" onclick="startDM()"><i class="fas fa-envelope"></i> DMする</button>
+            </div>
+            
+            <div class="form-card profile-posts-card">
+                <h3><i class="fas fa-th-list"></i> 投稿一覧</h3>
+                <div id="profile-posts-grid" class="profile-posts-grid">
+                    <p style="text-align: center; color: #999; margin-top: 10px;">投稿がありません。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="notification-section">
+            <div class="scrollable-content" id="notification-list">
+                <p style="text-align: center; padding: 20px;"><i class="fas fa-bell-slash"></i> 通知はありません。</p>
+            </div>
+        </div>
+
+        <div class="content-section" id="message-list-section">
+            <div class="scrollable-content" id="message-list">
+                <p style="text-align: center; padding: 20px;"><i class="fas fa-comments"></i> DM可能な相手がいません。</p>
+            </div>
+        </div>
+
+        <div class="content-section" id="chat-section">
+            <div class="chat-area">
+                <div class="chat-messages" id="chat-messages">
+                    <p style="text-align: center; color: #999;">会話の履歴がここに表示されます。</p>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-message-input" class="chat-message-input" placeholder="メッセージを入力...">
+                    <button id="send-chat-button" class="piyo-button" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="bottom-nav" id="bottom-nav">
+            <div class="nav-item active" onclick="showMainSection('main-section', this)">
+                <span class="nav-icon"><i class="fas fa-home"></i></span>
+                <span class="nav-label">ホーム</span>
+            </div>
+            <div class="nav-item" onclick="showMainSection('notification-section', this)">
+                <span class="nav-icon"><i class="fas fa-bell"></i></span>
+                <span class="nav-label">通知</span>
+            </div>
+            <div class="nav-item" onclick="showMainSection('post-creation-section', this)">
+                <span class="nav-icon"><i class="fas fa-plus-square"></i></span>
+                <span class="nav-label">投稿</span>
+            </div>
+            <div class="nav-item" onclick="showMainSection('message-list-section', this)">
+                <span class="nav-icon"><i class="fas fa-envelope"></i></span>
+                <span class="nav-label">メッセージ</span>
+            </div>
+            <div class="nav-item" onclick="showProfile(STATE.loggedInUserId)">
+                <span class="nav-icon"><i class="fas fa-user-circle"></i></span>
+                <span class="nav-label">マイページ</span>
+            </div>
+        </footer>
+    </div>
+
+    <div id="comment-overlay">
+        <div class="comment-panel" id="comment-panel">
+            <div class="comment-header">
+                コメント (<span id="comment-overlay-count">0</span>)
+                <span class="close-comment" onclick="closeCommentPanel()"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="comment-list" id="comment-list-container">
+                </div>
+            <div class="comment-input-area">
+                <input type="text" id="new-comment-text-input" placeholder="コメントを入力...">
+                <button id="send-comment-button" onclick="sendComment()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
